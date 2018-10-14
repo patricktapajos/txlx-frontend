@@ -1,28 +1,46 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-toolbar
+      app
+      color="primary"
+    >
+      <v-toolbar-side-icon>
+        <img class="icon-custom" src="./assets/brasao.png"/>
+      </v-toolbar-side-icon>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <v-content>
+      <router-view/>
+    </v-content>
+
+    <v-footer color="primary" app>
+      <span> &copy; SEMEF/SUBTI 2018</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
+  data () {
+    return {
+      title: 'Cadastro de Resíduos Descartáveis'
+    }
+  },
+  name: 'App'
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  .theme--light.v-toolbar {
+    color: rgb(255, 255, 255);
+  }
+  .theme--light.v-footer {
+    text-align: center;
+    color: rgb(255, 255, 255);    
 }
+  .icon-custom{
+    width: -webkit-fill-available !important;
+    margin-top: -5px;
+  }
 </style>
