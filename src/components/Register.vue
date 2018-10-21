@@ -7,48 +7,64 @@
       <v-flex xs12 lg8 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
+            
             <v-card-title primary-title>
               <h1>Cadastro</h1>
             </v-card-title>
+
             <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
                 <v-form ref="form" v-model="valid" class="pa-5">
+                  
                    <input type="hidden" v-model="id"/>
+                    
                     <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula" required
                     ></v-text-field>
+
                     <v-text-field v-model="cpf" :rules="cpfRules" label="CPF"  maxlength=14 :counter="14" required 
-                    return-masked-value 
-                    mask="###.###.###-##"
+                    return-masked-value mask="###.###.###-##"
                     ></v-text-field>
+
                     <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. Pessoas" required
                     ></v-text-field>
-                    <v-text-field v-model="tipoUso" :rules="tipoUsoRules" label="Tipo de Uso" required
-                    ></v-text-field>
+
+                    <v-select :items="tipos" item-value="id" item-text="descricao" v-model="tipoUso" :rules="tipoUsoRules" label="Tipo de Uso" required
+                      ></v-select>
+
                     <v-text-field v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração" required
                     ></v-text-field>
+
                     <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" required
                     ></v-text-field>
+
                     <v-text-field v-model="cpfDeclarante" :rules="cpfDeclaranteRules" label="CPF do Declarante" maxlength=14 :counter="14" required
-                    return-masked-value 
-                    mask="###.###.###-##"
+                    return-masked-value mask="###.###.###-##"
                     ></v-text-field>
+
                     <v-text-field v-model="email" :rules="emailRules" label="Email"></v-text-field>
+                    
                     <v-text-field v-model="telefone" label="Telefone"></v-text-field>
+                    
                     <v-text-field v-model="cep" label="CEP" maxlength=10 :counter="10" 
                     ></v-text-field>
+                    
                     <v-text-field v-model="logradouro" label="Logradouro"
                     ></v-text-field>
+                    
                     <v-text-field v-model="complemento" label="Complemento"
                     ></v-text-field>
+                    
                     <v-text-field v-model="numero" label="Número"
                     ></v-text-field>
+                    
                     <v-text-field v-model="bairro" label="Bairro"
                     ></v-text-field>
+                    
                     <v-text-field v-model="cidade" label="Cidade"
                     ></v-text-field>
 
                      <v-card-actions>
-                        <v-btn color="primary" large block v-on:click="salvar()">Salvar</v-btn>
-                        <v-btn color="error" large block v-on:click="cancelar()">Cancelar</v-btn>
+                        <v-btn color="primary" @click="salvar()">Salvar</v-btn>
+                        <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
                       </v-card-actions>
                 </v-form>
             </v-card>
@@ -64,14 +80,15 @@
   import 'vue-loading-overlay/dist/vue-loading.css';
   import CPF from 'gerador-validador-cpf'
   import axios from 'axios'
+
   const SALVAR_URL = process.env.HOST + 'cadastrar'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
-  const IMPRIMIR_URL = process.env.HOST + 'imprimir'
-  
+  const TIPOIMOVEL_URL = process.env.HOST + 'tipousoimovel'
 
   export default {
     data: () => ({
       props: ['pMatricula', 'pCpf'],
+      tipos: [],
       valid: false,
       isLoading: false,
       fullPage: true,
@@ -136,7 +153,13 @@
     methods: {
       consultar () {
         this.isLoading = true
-         axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
+
+          axios.get(TIPOIMOVEL_URL, {})
+          .then(({data}) => {
+            this.tipos = data;
+          });
+
+          axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
             .then(({data}) => {
               if (data) {
                 this.id             = data.id;
@@ -155,13 +178,13 @@
                 this.cidade         = data.cidade
                 this.ano            = data.ano
               } 
-            }).catch((err) => {
-              console.log(err)
-            });
-            
-            setTimeout(() => {
-                this.isLoading = false
-            },2000)
+          }).catch((err) => {
+            console.log(err)
+          });
+          
+          setTimeout(() => {
+              this.isLoading = false
+          },2000)
       },
       salvar () {
         this.isLoading = true
@@ -189,7 +212,7 @@
               if (data.success) {
                 this.msgErro = ''
                 this.ano = data.ano
-                // this.$router.push({name: 'Print', params: {pMatricula: data.matricula, pCpf: data.cpf, pAno: data.ano}})              
+                this.$router.push({name: 'Print', params: {pMatricula: data.matricula, pCpf: data.cpf, pAno: data.ano}})              
                 this.imprimir()
               } else {
                 this.msgErro = data.msgErro
@@ -204,11 +227,6 @@
       },
       cancelar () {
         this.$router.push('/identificar')
-      },
-
-      imprimir () {
-        this.$router.push('/identificar')
-        //axios.get(IMPRIMIR_URL, {matricula: this.matricula, cpf: this.cpf, ano: this.ano});
       }
     }
   }
