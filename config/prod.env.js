@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  HOST: '"http://descartavel.manaus.am.gov.br"'  
+  HOST: '"http://chibarro.manaus.am.gov.br/txlx-backend/public/"'  
 }

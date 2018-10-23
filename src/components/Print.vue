@@ -7,7 +7,7 @@
       <v-flex xs12 lg8 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
-                <v-card-title primary-title class="text-xs-center">
+                <v-card-title primary-title class="text-xs-center text-lg-center">
                     <h1>Comprovante de Cadastro</h1>
                 </v-card-title>
                 <div class="inner-table" id="pdf">
@@ -90,10 +90,10 @@
 </template>
 
 <script>
-  import Loading from 'vue-loading-overlay';
-  import 'vue-loading-overlay/dist/vue-loading.css';
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
   import * as jsPDF from 'jspdf-with-html2canvas'
-  import html2canvas from 'html2canvas';  
+  import html2canvas from 'html2canvas'  
   import axios from 'axios'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
 
@@ -185,11 +185,11 @@
             doc.text(230, 120, "Comprovante de Inscrição")
             doc.setFontSize(10)
             doc.setFontType('italic')
-            doc.text(10, 825, "Data de Impressão: - ")
+            doc.text(10, 825, "Data de Impressão: "+ this.$moment(new Date()).format("DD/MM/YYYY"))
 
             let options = {logging: false, async: true, scale: 2, backgroundColor: '#f9f9f9'}
             var pdfView = document.getElementById('pdf').cloneNode(true)
-            pdfView.style.width = '580px'
+            pdfView.style.width = '500px'
             pdfView.style.height = '430px'
             document.body.appendChild(pdfView);
             html2canvas(pdfView, options).then((canvas)=>{
@@ -197,7 +197,7 @@
                     document.body.removeChild(pdfView);
                     var imgData = canvas.toDataURL('image/jpeg');
                     doc.addImage(imgData, 'jpeg', 120, 150, 380, 400);
-                    doc.save("comprovante_trsd.pdf")
+                    doc.save("comprovante_trsd_"+this.ano+".pdf")
                 })
                 
                 setTimeout(() => {

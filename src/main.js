@@ -16,6 +16,13 @@ Vue.use(Vuetify, { theme: {
   success: '#4caf50'
 }})
 
+const moment = require('moment')
+require('moment/locale/pt')
+Vue.use(require('vue-moment'), {
+    moment
+})
+
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
