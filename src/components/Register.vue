@@ -212,8 +212,7 @@
               if (data.success) {
                 this.msgErro = ''
                 this.ano = data.ano
-                this.$router.push({name: 'Print', params: {pMatricula: data.matricula, pCpf: data.cpf, pAno: data.ano}})              
-                this.imprimir()
+                this.$router.push({name: 'Print', params: {MATRICULA_IPTU: this.matricula, CPF: this.cpf}})              
               } else {
                 this.msgErro = data.msgErro
               }
@@ -231,3 +230,8 @@
     }
   }
 </script>
+<style>
+  .v-input {
+    text-transform: uppercase;
+  }
+</style>

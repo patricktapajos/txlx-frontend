@@ -123,14 +123,14 @@
     }),
 
     mounted () {
-      /*if (this.$route.params.MATRICULA_IPTU) {        
+      if (this.$route.params.MATRICULA_IPTU) {        
             this.matricula = this.$route.params.MATRICULA_IPTU
             this.cpf = this.$route.params.CPF         
        } else {
         this.$router.push('/identificar')
-      }*/
-      this.matricula = '123'
-      this.cpf = '007.399.882-63'
+      }
+      /*this.matricula = '48400'
+      this.cpf = '085.090.547-89'*/
       this.consultar()
     },
     
@@ -187,11 +187,16 @@
             doc.setFontType('italic')
             doc.text(10, 825, "Data de Impressão: - ")
 
-            html2canvas(document.getElementById("pdf")).then((canvas)=>{
-                var codigoHTML = document.getElementById("pdf");
-                doc.addHTML(codigoHTML, 0, 0, {width: 1200 , pagesplit: true}, {}).then(()=>{
-                    var imgData = canvas.toDataURL('image/jpeg', 1);
-                    doc.addImage(imgData, 'jpeg', 120, 150);
+            let options = {logging: false, async: true, scale: 2, backgroundColor: '#f9f9f9'}
+            var pdfView = document.getElementById('pdf').cloneNode(true)
+            pdfView.style.width = '580px'
+            pdfView.style.height = '430px'
+            document.body.appendChild(pdfView);
+            html2canvas(pdfView, options).then((canvas)=>{
+                doc.addHTML(pdfView, 0, 0, {pagesplit: true}, {}).then(()=>{
+                    document.body.removeChild(pdfView);
+                    var imgData = canvas.toDataURL('image/jpeg');
+                    doc.addImage(imgData, 'jpeg', 120, 150, 380, 400);
                     doc.save("comprovante_trsd.pdf")
                 })
                 
@@ -200,17 +205,6 @@
                 },2000)
             });
         }
-
-        /*getUrl(){
-            var url = document.location.host;
-            if("chibarro.manaus.am.gov.br".indexOf(url) != -1){
-                url = "http://"+url+"/trsd";
-            }
-            else{
-                url ="http://"+url;   
-            }
-            return url;
-        }*/
     }
   }
 </script>

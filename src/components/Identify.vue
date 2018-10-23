@@ -64,6 +64,7 @@
               this.msgErro = ''
               this.validating = false
               this.$router.push({name: 'Register', params: {pMatricula: this.matricula, pCpf: this.cpf}})
+              //this.$router.push({name: 'Print', params: {MATRICULA_IPTU: this.matricula, CPF: this.cpf}})
             } else {
               this.validating = false
               this.msgErro = data.msgErro
