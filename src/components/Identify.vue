@@ -6,7 +6,7 @@
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
             <v-card-title primary-title>
-              <h2>Identificar</h2>
+              <h2>Identificar Imóvel</h2>
             </v-card-title>
             <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
                 <v-form ref="form" v-model="valid" class="pa-5">
@@ -36,7 +36,6 @@
 
 <script>
   import CPF from 'gerador-validador-cpf'
-  import axios from 'axios'
   const API_URL = process.env.HOST + 'identificar'
 
   export default {
@@ -59,12 +58,11 @@
       identificar () {
         if (this.$refs.form.validate()) {
           this.validating = true
-          axios.post(API_URL, {matricula: this.matricula, cpf: this.cpf}).then(({data}) => {
+          this.axios.post(API_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf}).then(({data}) => {
             if (data.success) {
               this.msgErro = ''
               this.validating = false
               this.$router.push({name: 'Register', params: {pMatricula: this.matricula, pCpf: this.cpf}})
-              //this.$router.push({name: 'Print', params: {MATRICULA_IPTU: this.matricula, CPF: this.cpf}})
             } else {
               this.validating = false
               this.msgErro = data.msgErro

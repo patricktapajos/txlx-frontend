@@ -94,7 +94,6 @@
   import 'vue-loading-overlay/dist/vue-loading.css'
   import * as jsPDF from 'jspdf-with-html2canvas'
   import html2canvas from 'html2canvas'  
-  import axios from 'axios'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
 
   export default {
@@ -119,7 +118,7 @@
       cidade: '',
       bairro: '',
       ano: '',
-      imgLogo: require('@/assets/brasao.jpg')
+      imgLogo: require('@/assets/logo-prefeitura.jpg')
     }),
 
     mounted () {
@@ -141,7 +140,7 @@
     methods: {
         consultar () {
             this.isLoading = true
-            axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
+            this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
                 .then(({data}) => {
                 if (data) {
                     this.id             = data.id;
@@ -176,28 +175,31 @@
         imprimir () {
             this.isLoading = true 
             var doc = new jsPDF('portrait', 'pt', 'a4', true)
-            doc.addImage(this.imgLogo, 'JPEG', 20, 25, 25, 35, 'brasao')
+            doc.addImage(this.imgLogo, 'jpeg', 20, 25, 140, 49, 'logo-prefeitura')
             doc.setFontSize(16)
             doc.text(230, 50, "Prefeitura de Manaus")
-            doc.setFontSize(15)            
-            doc.text(180, 100, "Taxa Residual de Sólidos Domésticos")
+            doc.setFontSize(15)
+            doc.text(195, 75, "Secretaria Municipal de Finanças")
+            doc.setFontSize(14)            
+            doc.text(185, 120, "Taxa Residual de Sólidos Domésticos")
             doc.setFontSize(13)      
-            doc.text(230, 120, "Comprovante de Inscrição")
+            doc.text(230, 140, "Comprovante de Inscrição")
             doc.setFontSize(10)
             doc.setFontType('italic')
             doc.text(10, 825, "Data de Impressão: "+ this.$moment(new Date()).format("DD/MM/YYYY"))
 
             let options = {logging: false, async: true, scale: 2, backgroundColor: '#f9f9f9'}
             var pdfView = document.getElementById('pdf').cloneNode(true)
-            pdfView.style.width = '500px'
+            pdfView.style.width = '390px'
             pdfView.style.height = '430px'
             document.body.appendChild(pdfView);
             html2canvas(pdfView, options).then((canvas)=>{
                 doc.addHTML(pdfView, 0, 0, {pagesplit: true}, {}).then(()=>{
                     document.body.removeChild(pdfView);
                     var imgData = canvas.toDataURL('image/jpeg');
-                    doc.addImage(imgData, 'jpeg', 120, 150, 380, 400);
-                    doc.save("comprovante_trsd_"+this.ano+".pdf")
+                    doc.addImage(imgData, 'jpeg', 120, 160, 380, 400);
+                    let y = this.$moment(new Date()).format("YYYY");
+                    doc.save("comprovante_trsd_"+y+".pdf")
                 })
                 
                 setTimeout(() => {

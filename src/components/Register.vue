@@ -9,7 +9,7 @@
           <v-card flat>
             
             <v-card-title primary-title>
-              <h1>Cadastro</h1>
+              <h1>Cadastrar Imóvel</h1>
             </v-card-title>
 
             <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
@@ -79,8 +79,6 @@
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/vue-loading.css';
   import CPF from 'gerador-validador-cpf'
-  import axios from 'axios'
-
   const SALVAR_URL = process.env.HOST + 'cadastrar'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
   const TIPOIMOVEL_URL = process.env.HOST + 'tipousoimovel'
@@ -154,12 +152,12 @@
       consultar () {
         this.isLoading = true
 
-          axios.get(TIPOIMOVEL_URL, {})
+          this.axios.get(TIPOIMOVEL_URL, {})
           .then(({data}) => {
             this.tipos = data;
           });
 
-          axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
+          this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
             .then(({data}) => {
               if (data) {
                 this.id             = data.id;
@@ -189,7 +187,7 @@
       salvar () {
         this.isLoading = true
         if (this.$refs.form.validate()) {
-          axios.post(SALVAR_URL, 
+          this.axios.post(SALVAR_URL, 
               {
                 ID: this.id,
                 MATRICULA_IPTU: this.matricula, 

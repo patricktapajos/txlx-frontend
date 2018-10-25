@@ -4,9 +4,8 @@
       app
       color="primary"
     >
-      <v-toolbar-side-icon>
-        <img class="icon-custom" src="./assets/brasao.png"/>
-      </v-toolbar-side-icon>
+     <!-- <img class="icon-custom" src="./assets/logo-prefeitura.png"/> -->
+      <div class="navbar-logo"></div>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -24,7 +23,7 @@
 export default {
   data () {
     return {
-      title: 'Cadastro de Resíduos Descartáveis'
+      title: 'Cadastro de Resíduos Domésticos'
     }
   },
   name: 'App'
@@ -39,8 +38,21 @@ export default {
     text-align: center;
     color: rgb(255, 255, 255);    
 }
-  .icon-custom{
-    width: -webkit-fill-available !important;
-    margin-top: -5px;
+
+  .navbar-logo {
+    width: 154px;
+    height: 49px;
+    background: url(assets/logo-prefeitura.png);
+    background-size: cover;
   }
+
+  @media (max-width: 970px){
+    .navbar-logo {
+        background: url(assets/brasao.png);
+        background-size: cover;
+        height: 45px;
+        width: 35px;
+    }
+  }
+  
 </style>
