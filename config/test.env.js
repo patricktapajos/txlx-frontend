@@ -5,5 +5,5 @@ const devEnv = require('./dev.env')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
-  HOST: '"http://chibarro.manaus.am.gov.br/txlx-backend/public/"'
+  HOST: '"http://chibarro.manaus.am.gov.br/trsd-back/public/"'
 })
