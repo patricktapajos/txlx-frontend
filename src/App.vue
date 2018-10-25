@@ -4,7 +4,6 @@
       app
       color="primary"
     >
-     <!-- <img class="icon-custom" src="./assets/logo-prefeitura.png"/> -->
       <div class="navbar-logo"></div>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
@@ -23,7 +22,7 @@
 export default {
   data () {
     return {
-      title: 'Cadastro de Resíduos Domésticos'
+      title: 'Declaração de Resíduos Sólidos Domésticos'
     }
   },
   name: 'App'

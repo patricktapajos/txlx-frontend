@@ -6,7 +6,7 @@
       <v-flex lg2 ></v-flex>
       <v-flex xs12 lg8 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
-          <v-card flat>
+            <v-card flat>
                 <v-card-title primary-title class="text-xs-center text-lg-center">
                     <h1>Comprovante de Cadastro</h1>
                 </v-card-title>
@@ -78,9 +78,13 @@
                         </tr>
                     </table>
                 </div>
+                <br>
+                <v-btn color="secondary"  @click="imprimir()">Imprimir</v-btn>
+                <v-btn color="error" @click="cancelar()">Sair</v-btn>
+                <br>
+                <br>
             </v-card>
-            <v-btn color="secondary"  @click="imprimir()">Imprimir</v-btn>
-            <v-btn color="error" @click="cancelar()">Sair</v-btn>
+            
             
         </v-container>
       </v-flex>
@@ -128,8 +132,6 @@
        } else {
         this.$router.push('/identificar')
       }
-      /*this.matricula = '48400'
-      this.cpf = '085.090.547-89'*/
       this.consultar()
     },
     
@@ -181,23 +183,25 @@
             doc.setFontSize(15)
             doc.text(195, 75, "Secretaria Municipal de Finanças")
             doc.setFontSize(14)            
-            doc.text(185, 120, "Taxa Residual de Sólidos Domésticos")
+            doc.text(160, 120, "Declaração de Resíduos de Sólidos Domésticos")
+            doc.setLineWidth(0.2)
+            doc.line(150, 125, 469, 125)
             doc.setFontSize(13)      
-            doc.text(230, 140, "Comprovante de Inscrição")
-            doc.setFontSize(10)
+            doc.text(230, 140, "Comprovante de Cadastro")
+            doc.setFontSize(9)
             doc.setFontType('italic')
             doc.text(10, 825, "Data de Impressão: "+ this.$moment(new Date()).format("DD/MM/YYYY"))
 
-            let options = {logging: false, async: true, scale: 2, backgroundColor: '#f9f9f9'}
+            let options = {logging: false, async: true, scale: 2}
             var pdfView = document.getElementById('pdf').cloneNode(true)
-            pdfView.style.width = '390px'
-            pdfView.style.height = '430px'
+            pdfView.style.width = '490px'
+            pdfView.style.height = '490px'
             document.body.appendChild(pdfView);
             html2canvas(pdfView, options).then((canvas)=>{
                 doc.addHTML(pdfView, 0, 0, {pagesplit: true}, {}).then(()=>{
                     document.body.removeChild(pdfView);
                     var imgData = canvas.toDataURL('image/jpeg');
-                    doc.addImage(imgData, 'jpeg', 120, 160, 380, 400);
+                    doc.addImage(imgData, 'jpeg', 120, 180, 380, 400);
                     let y = this.$moment(new Date()).format("YYYY");
                     doc.save("comprovante_trsd_"+y+".pdf")
                 })

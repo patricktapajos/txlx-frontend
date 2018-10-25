@@ -62,10 +62,8 @@
                     <v-text-field v-model="cidade" label="Cidade"
                     ></v-text-field>
 
-                     <v-card-actions>
-                        <v-btn color="primary" @click="salvar()">Salvar</v-btn>
-                        <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
-                      </v-card-actions>
+                      <v-btn color="primary" @click="salvar()">Salvar</v-btn>
+                      <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
                 </v-form>
             </v-card>
         </v-container>
