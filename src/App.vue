@@ -13,7 +13,7 @@
     </v-content>
 
     <v-footer color="primary" app>
-      <span> &copy; SEMEF/SUBTI 2018</span>
+      <span class="footer-text">© 2018 Prefeitura de Manaus. Todos os Direitos Reservados. Desenvolvido pela Subsecretaria de Tecnologia da Informação - SUBTI/SEMEF</span>
     </v-footer>
   </v-app>
 </template>
@@ -30,13 +30,30 @@ export default {
 </script>
 
 <style>
-  .theme--light.v-toolbar {
+  .theme--light .v-toolbar {
     color: rgb(255, 255, 255);
   }
-  .theme--light.v-footer {
+
+  .theme--light .v-footer {
     text-align: center;
+    display: grid;
     color: rgb(255, 255, 255);    
 }
+
+@media (max-width: 768px){
+
+    .theme--light .v-footer{
+        display: flex;
+    }
+    
+    .footer-text {
+        visibility: hidden;
+    }
+    .footer-text:before {
+        content: "© 2018 Prefeitura de Manaus";
+        visibility: visible;
+    }
+  }
 
   .navbar-logo {
     width: 154px;
