@@ -1,30 +1,28 @@
-# txlx-frontend
+# Taxa de Resíduos de Sólidos Domésticos
 
-> Sistema para cadastro de contribuintes da taxa de lixo.
+> Front-end para o sistema de declaração de resíduos sólidos domésticos. Link para o sistema http://chibarro.manaus.am.gov.br/trsd/#/.
 
-## Build Setup
+## Sobre o Sistema
+O sistema nomeado TRSD (Taxa de Resíduos Sólidos Domésticos) tem como objetivo obter dados da quantidade de resíduos sólidos gerados por um imóvel (residencial ou misto) para posterior taxação. É disponibilizado um formulário onde o contribuinte preenche alguns dados como seu endereço, o tipo de uso do imóvel que reside e a quantidade média de resíduos sólidos (lixo) que gera.
+
+O sistema contempla apenas a identificação do imóvel e do contribuinte (tela de identificação), preenchimento de dados em um formulário (cadastro) e impressão de um comprovante do cadastro.
+
+## Implementação
+Para a implementação foi utilizado o framework vue.js (https://vuejs.org/), com a adição do framework Vuetify (https://vuetifyjs.com/en/) para a estrutura de componentes e design do sistema.
+As demais dependências encontram-se no arquivo de configuração package.json.
+
+## Deployment
 
 ``` bash
-# install dependencies
+# Instalação de dependências
 npm install
 
-# serve with hot reload at localhost:8080
+> Em algumas distribuições Unix, o comando acima pode apresentar problemas quanto à instalação da dependência do pacote phantomjs. Caso ocorra, antes do comando acima, execute:
+
+npm install phantomjs-prebuilt@2.1.14 --ignore-scripts
+
+# Para execução no ambiente de desenvolvimento
 npm run dev
 
-# build for production with minification
+# Para execução no ambiente de homologação/produção
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
