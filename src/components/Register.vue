@@ -20,8 +20,12 @@
                     <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula" required
                     ></v-text-field>
 
-                    <v-text-field v-model="cpf" :rules="cpfRules" label="CPF"  maxlength=14 :counter="14" required 
+                    <v-text-field v-show="tipoContribuinte == 'cpf'" v-model="cpf" :rules="cpfRules" label="CPF"  maxlength=14 :counter="14" required 
                     return-masked-value mask="###.###.###-##"
+                    ></v-text-field>
+
+                    <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="cnpjRules" label="CNPJ" 
+                      maxlength=18 :counter="18" return-masked-value mask="##.###.###/####-##"
                     ></v-text-field>
 
                     <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. Pessoas" required
@@ -77,18 +81,21 @@
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/vue-loading.css';
   import CPF from 'gerador-validador-cpf'
+  import * as cnpj  from '@fnando/cnpj'
+  import { isValid as isValidCnpj } from "@fnando/cnpj";
   const SALVAR_URL = process.env.HOST + 'cadastrar'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
   const TIPOIMOVEL_URL = process.env.HOST + 'tipousoimovel'
 
   export default {
     data: () => ({
-      props: ['pMatricula', 'pCpf'],
+      props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
       tipos: [],
       valid: false,
       isLoading: false,
       fullPage: true,
       id: '',
+      tipoContribuinte: '',
       matricula: '',
       matriculaRules: [
         v => !!v || 'Matrícula é obrigatório'
@@ -120,6 +127,10 @@
         v => CPF.validate(v) || 'CPF Inválido'        
         
       ],
+      cnpj: '',
+      cnpjRules: [
+        (v) => v && cnpj.isValid(v) || 'CNPJ Inválido'
+      ],
       email: '',
       emailRules: [
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(v) || 'E-mail inválido'
@@ -140,7 +151,12 @@
     mounted () {
       if (this.$route.params.pMatricula || this.matricula) {
         this.matricula = this.$route.params.pMatricula
-        this.cpf = this.$route.params.pCpf         
+        this.tipoContribuinte = this.$route.params.pTipoContribuinte
+        if(this.tipoContribuinte == "cnpj"){
+          this.cnpj = this.$route.params.pCpfCnpj          
+        }else{
+          this.cpf = this.$route.params.pCpfCnpj
+        }
         this.consultar()
       } else {
         this.$router.push('/identificar')
@@ -149,13 +165,13 @@
     methods: {
       consultar () {
         this.isLoading = true
-
+          let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
           this.axios.get(TIPOIMOVEL_URL, {})
           .then(({data}) => {
             this.tipos = data;
           });
 
-          this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
+          this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
             .then(({data}) => {
               if (data) {
                 this.id             = data.id;
@@ -184,12 +200,13 @@
       },
       salvar () {
         this.isLoading = true
+        let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj        
         if (this.$refs.form.validate()) {
           this.axios.post(SALVAR_URL, 
               {
                 ID: this.id,
                 MATRICULA_IPTU: this.matricula, 
-                CPF: this.cpf, 
+                CPFCNPJ: cpfcnpj, 
                 NOME_DECLARANTE: this.nomeDeclarante, 
                 CPF_DECLARANTE: this.cpfDeclarante, 
                 FAIXA_GERACAO: this.faixaGeracao, 
@@ -208,7 +225,7 @@
               if (data.success) {
                 this.msgErro = ''
                 this.ano = data.ano
-                this.$router.push({name: 'Print', params: {MATRICULA_IPTU: this.matricula, CPF: this.cpf}})              
+                this.$router.push({name: 'Print', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
               } else {
                 this.msgErro = data.msgErro
               }

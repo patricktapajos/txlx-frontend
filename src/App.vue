@@ -31,16 +31,16 @@ export default {
 
 <style>
   .theme--light .v-toolbar {
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255) !important;
   }
 
   .theme--light .v-footer {
     text-align: center;
     display: grid;
-    color: rgb(255, 255, 255);    
+    color: rgb(255, 255, 255) !important;    
 }
 
-@media (max-width: 768px){
+@media (max-width: 890px){
 
     .theme--light .v-footer{
         display: flex;

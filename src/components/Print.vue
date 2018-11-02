@@ -16,9 +16,13 @@
                             <th>Matrícula</th>
                             <td>{{ matricula }}</td>
                         </tr>
-                        <tr>
+                        <tr v-show="tipoContribuinte == 'cpf'">
                             <th>CPF</th>
                             <td>{{ cpf }}</td>
+                        </tr>
+                        <tr v-show="tipoContribuinte == 'cnpj'">
+                            <th>CNPJ</th>
+                            <td>{{ cnpj }}</td>
                         </tr>
                         <tr>
                             <th>Qtde. de Pessoas</th>
@@ -104,10 +108,12 @@
     data: () => ({
       isLoading: false,
       fullPage: true,
-      props: ['MATRICULA_IPTU', 'CPF'],
+      props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],      
       id: '',
+      tipoContribuinte: '',
       matricula: '',
       cpf: '',
+      cnpj: '',
       qtdePessoas: '',
       tipoUso: '',
       faixaGeracao: '',
@@ -126,9 +132,14 @@
     }),
 
     mounted () {
-      if (this.$route.params.MATRICULA_IPTU) {        
-            this.matricula = this.$route.params.MATRICULA_IPTU
-            this.cpf = this.$route.params.CPF         
+      if (this.$route.params.pMatricula) {        
+            this.matricula = this.$route.params.pMatricula
+            this.tipoContribuinte = this.$route.params.pTipoContribuinte
+            if(this.tipoContribuinte == "cnpj"){
+                this.cnpj = this.$route.params.pCpfCnpj          
+            }else{
+                this.cpf = this.$route.params.pCpfCnpj
+            }         
        } else {
         this.$router.push('/identificar')
       }
@@ -141,8 +152,9 @@
 
     methods: {
         consultar () {
+            let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj                
             this.isLoading = true
-            this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPF: this.cpf})
+            this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
                 .then(({data}) => {
                 if (data) {
                     this.id             = data.id;
