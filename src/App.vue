@@ -40,6 +40,13 @@ export default {
     color: rgb(255, 255, 255) !important;    
 }
 
+  .error {
+      /*color: #a94442 !important;
+      background-color: #f2dede !important;
+      border-color: #ebccd1 !important;*/
+      display: block;
+  }
+
 @media (max-width: 890px){
 
     .theme--light .v-footer{

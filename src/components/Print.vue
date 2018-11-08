@@ -4,7 +4,7 @@
         :is-full-page="fullPage"></loading>
     <v-layout row class="text-xs-center">
       <v-flex lg2 ></v-flex>
-      <v-flex xs12 lg8 class="grey lighten-4">
+      <v-flex xs12 lg12 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
             <v-card flat>
                 <v-card-title primary-title class="text-xs-center text-lg-center">
@@ -25,7 +25,7 @@
                             <td>{{ cnpj }}</td>
                         </tr>
                         <tr>
-                            <th>Qtde. de Pessoas</th>
+                            <th>Qtd. de Pessoas que Habitam o Imóvel</th>
                             <td>{{ qtdePessoas }}</td>
                         </tr>
                         <tr>
@@ -33,7 +33,7 @@
                             <td>{{ tipoUso }}</td>
                         </tr>
                         <tr>
-                            <th>Faixa de Geração</th>
+                            <th>Faixa de Geração Diária de Resíduos</th>
                             <td>{{ faixaGeracao }}</td>
                         </tr>                    
                         <tr>
@@ -100,9 +100,11 @@
 <script>
   import Loading from 'vue-loading-overlay'
   import 'vue-loading-overlay/dist/vue-loading.css'
+  import CPF from 'gerador-validador-cpf'
+  import * as cnpj  from '@fnando/cnpj'
   import * as jsPDF from 'jspdf-with-html2canvas'
   import html2canvas from 'html2canvas'  
-  const CONSULTAR_URL = process.env.HOST + 'consultar'
+  const VISUALIZAR_URL = process.env.HOST + 'visualizarDados'
 
   export default {
     data: () => ({
@@ -144,6 +146,10 @@
         this.$router.push('/identificar')
       }
       this.consultar()
+    // this.matricula = '48400'
+    // this.tipoContribuinte = 'cpf'
+    // this.cpf = '085.090.547-89'
+    // this.consultar()
     },
     
     components: {
@@ -154,7 +160,7 @@
         consultar () {
             let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj                
             this.isLoading = true
-            this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
+            this.axios.post(VISUALIZAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
                 .then(({data}) => {
                 if (data) {
                     this.id             = data.id;
@@ -162,7 +168,7 @@
                     this.tipoUso        = data.tipo_uso 
                     this.faixaGeracao   = data.faixa_geracao
                     this.nomeDeclarante = data.nome_declarante
-                    this.cpfDeclarante  = data.cpf_declarante
+                    this.cpfDeclarante  = CPF.format(data.cpf_declarante)
                     this.email          = data.email
                     this.telefone       = data.telefone
                     this.cep            = data.cep
@@ -229,7 +235,7 @@
 
 <style>
 .inner-table{
-    width: 75%;
+    width: 90%;
     margin: 0 auto;
 }
 .table{

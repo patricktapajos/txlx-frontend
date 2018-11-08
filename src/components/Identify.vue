@@ -2,31 +2,31 @@
 <v-container>
     <v-layout row class="text-xs-center">
       <v-flex lg3 ></v-flex>
-      <v-flex xs12 lg6 class="grey lighten-4">
+      <v-flex xs12 lg8 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
             <v-card-title primary-title>
               <h2>Identificar Imóvel</h2>
             </v-card-title>
-            <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
-                <v-form ref="form" v-model="valid" class="pa-5">
+            <v-alert :value="msgErro" type="error" v-html="msgErro">{{ msgErro }}</v-alert>
+                <v-form ref="form" v-model="valid" class="pl-5 pr-5  pb-5">
                  
                  <v-subheader>Tipo de Contribuinte</v-subheader>
                   <v-radio-group v-model="tipoContribuinte" :rules="tipoContribuinteRules" row>
-                      <v-radio label="Pessoa Física" value="cpf"></v-radio>
-                      <v-radio label="Pessoa Jurídica" value="cnpj"></v-radio>
+                      <v-radio color="green" label="Pessoa Física" value="cpf"></v-radio>
+                      <v-radio color="green" label="Pessoa Jurídica" value="cnpj"></v-radio>
                     </v-radio-group>
 
                     <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula do IPTU" required></v-text-field>
                     
                     <v-text-field v-show="tipoContribuinte == 'cpf'"
-                        v-model="cpf" :rules="cpfRules" label="CPF" maxlength=14 :counter="14"
+                        v-model="cpf" :rules="[verificarCPF]" label="CPF do Contribuinte" maxlength=14 :counter="14"
                         return-masked-value 
                         mask="###.###.###-##"
                     ></v-text-field>
                     
                     <v-text-field v-show="tipoContribuinte == 'cnpj'"
-                        v-model="cnpj" :rules="cnpjRules" label="CNPJ" maxlength=18 :counter="18"
+                        v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte" maxlength=18 :counter="18"
                         return-masked-value 
                         mask="##.###.###/####-##"
                     ></v-text-field>
@@ -68,13 +68,7 @@
         v => !!v || 'Matrícula do IPTU é obrigatória'
       ],
       cpf: '',
-      cpfRules: [
-        (v) => v && CPF.validate(v) || 'CPF do Contribuinte é Inválido'
-      ],
       cnpj: '',
-      cnpjRules: [
-        (v) => v && cnpj.isValid(v) || 'CNPJ Inválido'
-      ],
       msgErro: ''
     }),
 
@@ -90,6 +84,22 @@
 
     methods: {      
       
+      verificarCPF(){
+        if(this.tipoContribuinte == 'cpf' && !CPF.validate(this.cpf)){
+            return 'CPF Inválido'
+          }else{
+            return true
+          }
+      },
+
+      verificarCNPJ(){
+          if(this.tipoContribuinte == 'cnpj' && !cnpj.isValid(this.cnpj)){
+            return 'CNPJ Inválido'
+          }else{
+            return true
+          }
+      },
+
       identificar () {
         if (this.$refs.form.validate()) {
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
@@ -119,4 +129,9 @@
     font-weight: normal;
     padding: 0;
 }
+
+a {
+  color: inherit !important;
+}
+
 </style>

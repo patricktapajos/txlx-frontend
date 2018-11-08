@@ -13,29 +13,29 @@
             </v-card-title>
 
             <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
-                <v-form ref="form" v-model="valid" class="pa-5">
+                <v-form ref="form" v-model="valid" class="pl-5 pr-5">
                   
                    <input type="hidden" v-model="id"/>
                     
-                    <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula" required
+                    <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula de IPTU" required disabled
                     ></v-text-field>
 
-                    <v-text-field v-show="tipoContribuinte == 'cpf'" v-model="cpf" :rules="cpfRules" label="CPF"  maxlength=14 :counter="14" required 
+                    <v-text-field v-show="tipoContribuinte == 'cpf'" v-model="cpf" :rules="[verificarCPF]" label="CPF do Contribuinte ou Responsável Financeiro"  maxlength=14 :counter="14" required disabled
                     return-masked-value mask="###.###.###-##"
                     ></v-text-field>
 
-                    <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="cnpjRules" label="CNPJ" 
+                    <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte ou Responsável Financeiro" 
                       maxlength=18 :counter="18" return-masked-value mask="##.###.###/####-##"
                     ></v-text-field>
 
-                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. Pessoas" required
+                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" required
                     ></v-text-field>
 
                     <v-select :items="tipos" item-value="id" item-text="descricao" v-model="tipoUso" :rules="tipoUsoRules" label="Tipo de Uso" required
                       ></v-select>
 
-                    <v-text-field v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração" required
-                    ></v-text-field>
+                    <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" required
+                      ></v-select>
 
                     <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" required
                     ></v-text-field>
@@ -46,24 +46,24 @@
 
                     <v-text-field v-model="email" :rules="emailRules" label="Email"></v-text-field>
                     
-                    <v-text-field v-model="telefone" label="Telefone"></v-text-field>
+                    <v-text-field v-model="telefone" label="Telefone"  return-masked-value mask="(##)#####-####"></v-text-field>
                     
-                    <v-text-field v-model="cep" label="CEP" maxlength=10 :counter="10" 
+                    <v-text-field v-model="cep" label="CEP" maxlength=10 :counter="10" disabled
                     ></v-text-field>
                     
-                    <v-text-field v-model="logradouro" label="Logradouro"
+                    <v-text-field v-model="logradouro" label="Logradouro" disabled
                     ></v-text-field>
                     
-                    <v-text-field v-model="complemento" label="Complemento"
+                    <v-text-field v-model="complemento" label="Complemento" disabled
                     ></v-text-field>
                     
-                    <v-text-field v-model="numero" label="Número"
+                    <v-text-field v-model="numero" label="Número" disabled
                     ></v-text-field>
                     
-                    <v-text-field v-model="bairro" label="Bairro"
+                    <v-text-field v-model="bairro" label="Bairro" disabled
                     ></v-text-field>
                     
-                    <v-text-field v-model="cidade" label="Cidade"
+                    <v-text-field v-model="cidade" label="Cidade" disabled
                     ></v-text-field>
 
                       <v-btn color="primary" @click="salvar()">Salvar</v-btn>
@@ -86,11 +86,13 @@
   const SALVAR_URL = process.env.HOST + 'cadastrar'
   const CONSULTAR_URL = process.env.HOST + 'consultar'
   const TIPOIMOVEL_URL = process.env.HOST + 'tipousoimovel'
+  const FAIXAGERACAO_URL = process.env.HOST + 'geracaoresiduos'
 
   export default {
     data: () => ({
       props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
       tipos: [],
+      faixas: [],
       valid: false,
       isLoading: false,
       fullPage: true,
@@ -98,24 +100,21 @@
       tipoContribuinte: '',
       matricula: '',
       matriculaRules: [
-        v => !!v || 'Matrícula é obrigatório'
+        v => !!v || 'Matrícula de IPTU é obrigatório'
       ],
       cpf: '',
-      cpfRules: [
-        v => !!v || 'CPF é obrigatório',
-        v => CPF.validate(v) || 'CPF Inválido'        
-      ],
+      cnpj: '',
       qtdePessoas: '',
       qtdePessoasRules: [
-        v => !!v || 'Qtde. Pessoas é obrigatório'
+        v => !!v || 'Qtde. Pessoas que Habitam o Imóvel é obrigatório'
       ],
       tipoUso: '',
       tipoUsoRules: [
-        v => !!v || 'Tipo Uso é obrigatório'
+        v => !!v || 'Tipo de Uso é obrigatório'
       ],
       faixaGeracao: '',
       faixaGeracaoRules: [
-        v => !!v || 'Faixa Geração é obrigatório'
+        v => !!v || 'Faixa Geração Diária é obrigatório'
       ],
       nomeDeclarante: '',
       nomeDeclaranteRules: [
@@ -124,12 +123,7 @@
       cpfDeclarante: '',
       cpfDeclaranteRules: [
         v => !!v || 'CPF do Declarante é obrigatório',
-        v => CPF.validate(v) || 'CPF Inválido'        
-        
-      ],
-      cnpj: '',
-      cnpjRules: [
-        (v) => v && cnpj.isValid(v) || 'CNPJ Inválido'
+        v => CPF.validate(v) || 'CPF do Declarante Inválido'        
       ],
       email: '',
       emailRules: [
@@ -161,11 +155,33 @@
       } else {
         this.$router.push('/identificar')
       }
+      // this.matricula = '48400'
+      // this.tipoContribuinte = 'cpf'
+      // this.cpf = '085.090.547-89'
+      // this.consultar()
     },
     methods: {
+
+      verificarCPF(){
+        if(this.tipoContribuinte == 'cpf' && !CPF.validate(this.cpf)){
+            return 'CPF Inválido'
+          }else{
+            return true
+          }
+      },
+
+      verificarCNPJ(){
+          if(this.tipoContribuinte == 'cnpj' && !cnpj.isValid(this.cnpj)){
+            return 'CNPJ Inválido'
+          }else{
+            return true
+          }
+      },
       consultar () {
         this.isLoading = true
+          
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
+
           this.axios.get(TIPOIMOVEL_URL, {})
           .then(({data}) => {
             this.tipos = data;
@@ -189,11 +205,16 @@
                 this.bairro         = data.bairro
                 this.cidade         = data.cidade
                 this.ano            = data.ano
+
+                this.axios.get(FAIXAGERACAO_URL+'/'+this.tipoUso)
+                .then(({data}) => {
+                  this.faixas = data;
+                });
               } 
           }).catch((err) => {
             console.log(err)
           });
-          
+         
           setTimeout(() => {
               this.isLoading = false
           },2000)
@@ -244,7 +265,7 @@
   }
 </script>
 <style>
-  .v-input {
+  .v-text-field__slot > input {
     text-transform: uppercase;
   }
 </style>
