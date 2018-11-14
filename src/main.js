@@ -9,7 +9,7 @@ import VueAxios from 'vue-axios'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify, { theme: {
-  primary: '#4CAF50',
+  primary: '#009688',
   secondary: '#66BB6A',
   accent: '#FF9800',
   error: '#f44336',

@@ -12,7 +12,8 @@
               <h1>Cadastrar Imóvel</h1>
             </v-card-title>
 
-            <v-alert :value="msgErro" type="error">{{ msgErro }}</v-alert>
+            <v-alert :value="msgErro" type="error" outline>{{ msgErro }}</v-alert>
+            
                 <v-form ref="form" v-model="valid" class="pl-5 pr-5">
                   
                    <input type="hidden" v-model="id"/>
@@ -32,7 +33,7 @@
                     ></v-text-field>
 
                     <v-select :items="tipos" item-value="id" item-text="descricao" v-model="tipoUso" :rules="tipoUsoRules" label="Tipo de Uso" required
-                      ></v-select>
+                     @change="carregarFaixaGeracao()" ></v-select>
 
                     <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" required
                       ></v-select>
@@ -182,10 +183,7 @@
           
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
 
-          this.axios.get(TIPOIMOVEL_URL, {})
-          .then(({data}) => {
-            this.tipos = data;
-          });
+         this.carregarTipoUso()
 
           this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
             .then(({data}) => {
@@ -205,11 +203,8 @@
                 this.bairro         = data.bairro
                 this.cidade         = data.cidade
                 this.ano            = data.ano
-
-                this.axios.get(FAIXAGERACAO_URL+'/'+this.tipoUso)
-                .then(({data}) => {
-                  this.faixas = data;
-                });
+                
+                this.carregarFaixaGeracao()
               } 
           }).catch((err) => {
             console.log(err)
@@ -219,10 +214,26 @@
               this.isLoading = false
           },2000)
       },
+
+      carregarTipoUso (){
+        this.axios.get(TIPOIMOVEL_URL, {})
+          .then(({data}) => {
+            this.tipos = data;
+          });
+      },
+      
+      carregarFaixaGeracao (){
+        this.axios.get(FAIXAGERACAO_URL+'/'+this.tipoUso)
+          .then(({data}) => {
+            this.faixas = data;
+          })
+      },
+
       salvar () {
-        this.isLoading = true
-        let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj        
+        console.log(this.$refs.form.validate())
         if (this.$refs.form.validate()) {
+          let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj        
+          this.isLoading = true
           this.axios.post(SALVAR_URL, 
               {
                 ID: this.id,

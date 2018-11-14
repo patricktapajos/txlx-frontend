@@ -8,7 +8,7 @@
             <v-card-title primary-title>
               <h2>Identificar Imóvel</h2>
             </v-card-title>
-            <v-alert :value="msgErro" type="error" v-html="msgErro">{{ msgErro }}</v-alert>
+            <v-alert :value="msgErro" type="error"  outline v-html="msgErro">{{ msgErro }}</v-alert>
                 <v-form ref="form" v-model="valid" class="pl-5 pr-5  pb-5">
                  
                  <v-subheader>Tipo de Contribuinte</v-subheader>
@@ -59,7 +59,7 @@
     data: () => ({
       valid: false,
       validating: false,
-      tipoContribuinte:'',
+      tipoContribuinte:'cpf',
       tipoContribuinteRules: [
         v => !!v || 'Tipo de Contribuinte é obrigatório'
       ],

@@ -32,6 +32,7 @@ export default {
 <style>
   .theme--light .v-toolbar {
     color: rgb(255, 255, 255) !important;
+    background-image: linear-gradient(to bottom, rgb(52,95,140), rgba(74, 146, 123, 1));
   }
 
   .theme--light .v-footer {
@@ -40,12 +41,12 @@ export default {
     color: rgb(255, 255, 255) !important;    
 }
 
-  .error {
-      /*color: #a94442 !important;
+  /*.error {
+      color: #a94442 !important;
       background-color: #f2dede !important;
-      border-color: #ebccd1 !important;*/
-      display: block;
-  }
+      border-color: #ebccd1 !important;
+      display: block !important;
+  }*/
 
 @media (max-width: 890px){
 
@@ -63,9 +64,9 @@ export default {
   }
 
   .navbar-logo {
-    width: 154px;
+    width: 160px;
     height: 49px;
-    background: url(assets/logo-prefeitura.png);
+    background: url(assets/logo_2017_2020.png);
     background-size: cover;
   }
 
@@ -75,6 +76,15 @@ export default {
         background-size: cover;
         height: 45px;
         width: 35px;
+    }
+  }
+
+  @media (max-width: 320px){
+    .navbar-logo {
+        background: url(assets/brasao.png);
+        background-size: cover;
+        height: 45px;
+        width: 60px;
     }
   }
   
