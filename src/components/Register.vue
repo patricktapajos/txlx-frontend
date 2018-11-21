@@ -13,7 +13,7 @@
             </v-card-title>
 
             <v-alert :value="msgErro" type="error" outline>{{ msgErro }}</v-alert>
-            
+
                 <v-form ref="form" v-model="valid" class="pl-5 pr-5">
                   
                    <input type="hidden" v-model="id"/>
@@ -26,7 +26,7 @@
                     ></v-text-field>
 
                     <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte ou Responsável Financeiro" 
-                      maxlength=18 :counter="18" return-masked-value mask="##.###.###/####-##"
+                      maxlength=18 :counter="18" required disabled return-masked-value mask="##.###.###/####-##"
                     ></v-text-field>
 
                     <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" required
@@ -156,10 +156,6 @@
       } else {
         this.$router.push('/identificar')
       }
-      // this.matricula = '48400'
-      // this.tipoContribuinte = 'cpf'
-      // this.cpf = '085.090.547-89'
-      // this.consultar()
     },
     methods: {
 
@@ -230,7 +226,6 @@
       },
 
       salvar () {
-        console.log(this.$refs.form.validate())
         if (this.$refs.form.validate()) {
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj        
           this.isLoading = true
