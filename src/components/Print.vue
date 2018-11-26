@@ -8,7 +8,7 @@
         <v-container style="position: relative;" class="text-xs-center">
             <v-card flat>
                 <v-card-title primary-title class="text-xs-center text-lg-center">
-                    <h1>Comprovante de Cadastro</h1>
+                    <h2><v-icon>view_list</v-icon>Comprovante de Cadastro</h2>
                 </v-card-title>
                 <div class="inner-table" id="pdf">
                     <table class="table">
@@ -80,6 +80,11 @@
                             <th>Ano do Cadastro</th>
                             <td>{{ ano }}</td>
                         </tr>
+                        <tr>
+                            <th>Código de Identificação</th>
+                            <td>{{ codigo_comprovante }}</td>
+                        </tr>
+
                     </table>
                 </div>
                 <br>
@@ -130,6 +135,7 @@
       cidade: '',
       bairro: '',
       ano: '',
+      codigo_comprovante: '',
       imgLogo: require('@/assets/logo-prefeitura.jpg')
     }),
 
@@ -178,6 +184,7 @@
                     this.bairro         = data.bairro
                     this.cidade         = data.cidade
                     this.ano            = data.ano
+                    this.codigo_comprovante = data.codigo_comprovante
                 } 
                 }).catch((err) => {
                 console.log(err)

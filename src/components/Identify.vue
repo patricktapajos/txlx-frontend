@@ -6,33 +6,32 @@
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
             <v-card-title primary-title>
-              <h2>Identificar Imóvel</h2>
+              <h2> <v-icon>perm_identity</v-icon>Identificação do Contribuinte</h2>
             </v-card-title>
             <v-alert :value="msgErro" type="error"  outline v-html="msgErro">{{ msgErro }}</v-alert>
                 <v-form ref="form" v-model="valid" class="pl-5 pr-5  pb-5">
                  
-                 <v-subheader>Tipo de Contribuinte</v-subheader>
                   <v-radio-group v-model="tipoContribuinte" :rules="tipoContribuinteRules" row>
                       <v-radio color="green" label="Pessoa Física" value="cpf"></v-radio>
                       <v-radio color="green" label="Pessoa Jurídica" value="cnpj"></v-radio>
                     </v-radio-group>
 
-                    <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula do IPTU" required></v-text-field>
+                    <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula do IPTU" required solo></v-text-field>
                     
                     <v-text-field v-show="tipoContribuinte == 'cpf'"
                         v-model="cpf" :rules="[verificarCPF]" label="CPF do Contribuinte" maxlength=14 :counter="14"
                         return-masked-value 
-                        mask="###.###.###-##"
+                        mask="###.###.###-##" solo
                     ></v-text-field>
                     
                     <v-text-field v-show="tipoContribuinte == 'cnpj'"
                         v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte" maxlength=18 :counter="18"
                         return-masked-value 
-                        mask="##.###.###/####-##"
+                        mask="##.###.###/####-##" solo
                     ></v-text-field>
                      
                      <v-card-actions>
-                        <v-btn color="primary" large block :disabled="validating" @click="identificar()">Verificar</v-btn>
+                        <v-btn color="primary" large block :disabled="validating" @click="identificar()">Prosseguir >></v-btn>
                         <v-progress-circular
                           v-show="validating"
                           :width="3"
@@ -108,7 +107,7 @@
             if (data.success) {
               this.msgErro = ''
               this.validating = false
-              this.$router.push({name: 'Register', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
+              this.$router.push({name: 'Immobile', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
             } else {
               this.validating = false
               this.msgErro = data.msgErro
@@ -123,15 +122,8 @@
   }
 </script>
 <style>
-.v-subheader {
-    display: flex;
-    font-size: 17px;
-    font-weight: normal;
-    padding: 0;
-}
-
-a {
-  color: inherit !important;
-}
+  a {
+    color: inherit !important;
+  }
 
 </style>

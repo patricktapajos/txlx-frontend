@@ -9,66 +9,59 @@
           <v-card flat>
             
             <v-card-title primary-title>
-              <h1>Cadastrar Imóvel</h1>
+              <h2><v-icon>assessment</v-icon>Classificação do Imóvel</h2>
             </v-card-title>
 
             <v-alert :value="msgErro" type="error" outline>{{ msgErro }}</v-alert>
 
                 <v-form ref="form" v-model="valid" class="pl-5 pr-5">
-                  
-                   <input type="hidden" v-model="id"/>
+
+                  <input type="hidden" v-model="id"/>
                     
-                    <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula de IPTU" required disabled
+                  <v-text-field v-model="matricula" :rules="matriculaRules" label="Matrícula de IPTU" required disabled
+                  ></v-text-field>
+
+                  <v-text-field v-show="tipoContribuinte == 'cpf'" v-model="cpf" :rules="[verificarCPF]" label="CPF do Contribuinte ou Responsável Financeiro"  maxlength=14 :counter="14" required disabled
+                  return-masked-value mask="###.###.###-##"
+                  ></v-text-field>
+
+                  <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte ou Responsável Financeiro" 
+                    maxlength=18 :counter="18" required disabled return-masked-value mask="##.###.###/####-##"
+                  ></v-text-field>
+
+                  <fieldset>
+                    <legend>
+                      <h2>Declaração de Resíduos Sólidos Domésticos</h2>
+                    </legend>
+                    
+                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" solo required
                     ></v-text-field>
 
-                    <v-text-field v-show="tipoContribuinte == 'cpf'" v-model="cpf" :rules="[verificarCPF]" label="CPF do Contribuinte ou Responsável Financeiro"  maxlength=14 :counter="14" required disabled
-                    return-masked-value mask="###.###.###-##"
-                    ></v-text-field>
-
-                    <v-text-field v-show="tipoContribuinte == 'cnpj'" v-model="cnpj" :rules="[verificarCNPJ]" label="CNPJ do Contribuinte ou Responsável Financeiro" 
-                      maxlength=18 :counter="18" required disabled return-masked-value mask="##.###.###/####-##"
-                    ></v-text-field>
-
-                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" required
-                    ></v-text-field>
-
-                    <v-select :items="tipos" item-value="id" item-text="descricao" v-model="tipoUso" :rules="tipoUsoRules" label="Tipo de Uso" required
-                     @change="carregarFaixaGeracao()" ></v-select>
-
-                    <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" required
+                    <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" solo required
                       ></v-select>
 
-                    <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" required
+                  </fieldset>
+
+                  <fieldset>
+                    <legend>
+                      <h2>Dados do Declarante</h2>
+                    </legend>
+
+                    <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" solo required
                     ></v-text-field>
 
-                    <v-text-field v-model="cpfDeclarante" :rules="cpfDeclaranteRules" label="CPF do Declarante" maxlength=14 :counter="14" required
+                    <v-text-field v-model="cpfDeclarante" :rules="cpfDeclaranteRules" label="CPF do Declarante" maxlength=14 :counter="14" solo required
                     return-masked-value mask="###.###.###-##"
                     ></v-text-field>
 
-                    <v-text-field v-model="email" :rules="emailRules" label="Email"></v-text-field>
+                    <v-text-field v-model="email" :rules="emailRules" label="Email" solo></v-text-field>
                     
-                    <v-text-field v-model="telefone" label="Telefone"  return-masked-value mask="(##)#####-####"></v-text-field>
-                    
-                    <v-text-field v-model="cep" label="CEP" maxlength=10 :counter="10" disabled
-                    ></v-text-field>
-                    
-                    <v-text-field v-model="logradouro" label="Logradouro" disabled
-                    ></v-text-field>
-                    
-                    <v-text-field v-model="complemento" label="Complemento" disabled
-                    ></v-text-field>
-                    
-                    <v-text-field v-model="numero" label="Número" disabled
-                    ></v-text-field>
-                    
-                    <v-text-field v-model="bairro" label="Bairro" disabled
-                    ></v-text-field>
-                    
-                    <v-text-field v-model="cidade" label="Cidade" disabled
-                    ></v-text-field>
+                    <v-text-field v-model="telefone" label="Telefone"  return-masked-value mask="(##)#####-####" solo></v-text-field>
 
-                      <v-btn color="primary" @click="salvar()">Salvar</v-btn>
-                      <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
+                  </fieldset>
+                  
+                  <v-btn color="primary" @click="salvar()">Salvar</v-btn>
+                  <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
                 </v-form>
             </v-card>
         </v-container>
@@ -179,8 +172,6 @@
           
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
 
-         this.carregarTipoUso()
-
           this.axios.post(CONSULTAR_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj})
             .then(({data}) => {
               if (data) {
@@ -273,5 +264,10 @@
 <style>
   .v-text-field__slot > input {
     text-transform: uppercase;
+  }
+
+  fieldset {
+    border: 1px solid #d4d4d4 !important;
+    padding: 15px;
   }
 </style>

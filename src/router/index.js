@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Identify from '@/components/Identify'
 import Register from '@/components/Register'
 import Print from '@/components/Print'
+import Immobile from '@/components/Immobile'
 
 Vue.use(Router)
 
@@ -17,6 +18,12 @@ export default new Router({
       path: '/identificar',
       name: 'Identify',
       component: Identify
+    },
+    {
+      path: '/dadosimovel',
+      name: 'Immobile',
+      component: Immobile,
+      props: true
     },
     {
       path: '/cadastro',

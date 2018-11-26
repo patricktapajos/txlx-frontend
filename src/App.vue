@@ -8,7 +8,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-content>
+    <v-content class="grey lighten-4">
       <router-view/>
     </v-content>
 
@@ -30,6 +30,10 @@ export default {
 </script>
 
 <style>
+
+  /*.theme--light.v-card {
+    background-color: #f5f5f5 !important;
+  }*/
   .theme--light .v-toolbar {
     color: rgb(255, 255, 255) !important;
     background-image: linear-gradient(to bottom, rgb(52,95,140), rgba(74, 146, 123, 1));
