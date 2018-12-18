@@ -3,8 +3,8 @@
     <v-layout row class="text-xs-center">
       <loading :active.sync="isLoading" 
         :is-full-page="fullPage"></loading>
-      <v-flex lg2 ></v-flex>
-      <v-flex xs12 lg8 class="grey lighten-4">
+      <v-flex lg3 ></v-flex>
+      <v-flex xs12 lg6 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
             
@@ -54,7 +54,7 @@
             </v-card>
         </v-container>
       </v-flex>
-      <v-flex lg2 ></v-flex>
+      <v-flex lg3 ></v-flex>
     </v-layout>
   </v-container>
 </template>

@@ -9,6 +9,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content class="grey lighten-4">
+      <div class="overlay"></div>
       <router-view/>
     </v-content>
 
@@ -30,21 +31,31 @@ export default {
 </script>
 
 <style>
-
-  /*.theme--light.v-card {
-    background-color: #f5f5f5 !important;
-  }*/
   
-  /*.theme--light .v-toolbar {
+  .theme--light .v-toolbar {
     color: rgb(255, 255, 255) !important;
-    background-image: linear-gradient(to bottom, rgb(52,95,140), rgba(74, 146, 123, 1));
-  }*/
+  }
+
+  .v-content__wrap {
+    background-image: url(assets/topo.png);
+    background-size: cover;
+  }
 
   .theme--light .v-footer {
     text-align: center;
     display: grid;
     color: rgb(255, 255, 255) !important;    
-}
+  }
+
+  .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .55;
+      background-color: #000000;
+  }
 
   /*.error {
       color: #a94442 !important;
