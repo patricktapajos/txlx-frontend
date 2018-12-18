@@ -107,7 +107,13 @@
             if (data.success) {
               this.msgErro = ''
               this.validating = false
-              this.$router.push({name: 'Immobile', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
+              this.$session.set('pMatricula', this.matricula)
+              this.$session.set('pCpfCnpj', cpfcnpj)
+              this.$session.set('pTipoContribuinte', this.tipoContribuinte)
+
+              //this.$router.push({name: 'Immobile', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
+              this.$router.push({name: 'Immobile'})
+
             } else {
               this.validating = false
               this.msgErro = data.msgErro

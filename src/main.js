@@ -6,10 +6,12 @@ import router from './router'
 import Vuetify from 'vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueSession from 'vue-session'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify, { theme: {
-  primary: '#009688',
+  //primary: '#009688',
+  primary: '#56a05b',
   secondary: '#66BB6A',
   accent: '#FF9800',
   error: '#f44336',
@@ -24,7 +26,23 @@ Vue.use(require('vue-moment'), {
     moment
 })
 
+axios.interceptors.request.use((config)  => {
+  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQHRyc2QiLCJnaXRodWIiOiJodHRwczpcL1wvZ2l0bGFiLm1hbmF1cy5hbS5nb3YuYnJcL1NFTUVGXC9nZXNpc3BcL3Npc3RlbWFzXC90eGx4LWJhY2tlbmQuZ2l0In0.ZpVTOfszOoCwnsAvwa7jp9zKfmw81ntbRy9WybdxWF0'
+  config.headers['X-Token'] = token
+  config.headers['Content-Type'] = 'application/json; charset=utf-8'
+  return config
+}, (err) => {
+  console.log(err)
+})
+
+axios.interceptors.response.use((response) => {
+  return response
+}, (error) => {
+  console.log(error)
+})
+
 Vue.use(VueAxios, axios)
+Vue.use(VueSession)
 
 Vue.config.productionTip = false
 
@@ -35,20 +53,8 @@ new Vue({
   components: { App },
   template: '<App/>',
   mounted: function(){
+    
+    this.$session.start()
 
-    this.axios.interceptors.request.use((config)  => {
-      const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiQHRyc2QiLCJnaXRodWIiOiJodHRwczpcL1wvZ2l0bGFiLm1hbmF1cy5hbS5nb3YuYnJcL1NFTUVGXC9nZXNpc3BcL3Npc3RlbWFzXC90eGx4LWJhY2tlbmQuZ2l0In0.ZpVTOfszOoCwnsAvwa7jp9zKfmw81ntbRy9WybdxWF0'
-      config.headers['X-Token'] = token
-      config.headers['Content-Type'] = 'application/json; charset=utf-8'
-      return config
-    }, (err) => {
-      console.log(err)
-    })
-
-    this.axios.interceptors.response.use((response) => {
-      return response
-    }, (error) => {
-      console.log(error)
-    })
   }
 })

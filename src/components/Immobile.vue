@@ -66,7 +66,7 @@
 
   export default {
     data: () => ({
-      props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
+      //props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
       valid: false,
       isLoading: false,
       fullPage: true,
@@ -87,13 +87,15 @@
          loading: Loading
       },
     mounted () {
-      if (this.$route.params.pMatricula || this.matricula) {
-        this.matricula = this.$route.params.pMatricula
-        this.tipoContribuinte = this.$route.params.pTipoContribuinte
+      
+      this.matricula = this.$session.get('pMatricula')
+
+      if (this.matricula) {
+        this.tipoContribuinte = this.$session.get('pTipoContribuinte')
         if(this.tipoContribuinte == "cnpj"){
-          this.cnpj = this.$route.params.pCpfCnpj          
+          this.cnpj = this.$session.get('pCpfCnpj')          
         }else{
-          this.cpf = this.$route.params.pCpfCnpj
+          this.cpf = this.$session.get('pCpfCnpj')
         }
         this.consultar()
       } else {
@@ -136,7 +138,7 @@
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj        
           this.isLoading = true
          
-          this.$router.push({name: 'Register', params: {pMatricula: this.matricula, pCpfCnpj: cpfcnpj, pTipoContribuinte: this.tipoContribuinte}})
+          this.$router.push({name: 'Register'})
            
             setTimeout(() => {
                 this.isLoading = false
@@ -145,6 +147,9 @@
       },
 
       cancelar () {
+        this.$session.remove('pMatricula')
+        this.$session.remove('pCpfCnpj')
+        this.$session.remove('pTipoContribuinte')
         this.$router.push('/identificar')
       }
     }

@@ -34,10 +34,11 @@ export default {
   /*.theme--light.v-card {
     background-color: #f5f5f5 !important;
   }*/
-  .theme--light .v-toolbar {
+  
+  /*.theme--light .v-toolbar {
     color: rgb(255, 255, 255) !important;
     background-image: linear-gradient(to bottom, rgb(52,95,140), rgba(74, 146, 123, 1));
-  }
+  }*/
 
   .theme--light .v-footer {
     text-align: center;

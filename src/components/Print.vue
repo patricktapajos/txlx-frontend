@@ -115,7 +115,7 @@
     data: () => ({
       isLoading: false,
       fullPage: true,
-      props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],      
+      //props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],      
       id: '',
       tipoContribuinte: '',
       matricula: '',
@@ -140,22 +140,19 @@
     }),
 
     mounted () {
-      if (this.$route.params.pMatricula) {        
-            this.matricula = this.$route.params.pMatricula
-            this.tipoContribuinte = this.$route.params.pTipoContribuinte
+      this.matricula = this.$session.get('pMatricula')
+        
+      if (this.matricula) {        
+            this.tipoContribuinte = this.$session.get('pTipoContribuinte')
             if(this.tipoContribuinte == "cnpj"){
-                this.cnpj = this.$route.params.pCpfCnpj          
+                this.cnpj = this.$session.get('pCpfCnpj')          
             }else{
-                this.cpf = this.$route.params.pCpfCnpj
-            }         
+                this.cpf = this.$session.get('pCpfCnpj')
+            }
        } else {
         this.$router.push('/identificar')
       }
       this.consultar()
-    // this.matricula = '48400'
-    // this.tipoContribuinte = 'cpf'
-    // this.cpf = '085.090.547-89'
-    // this.consultar()
     },
     
     components: {
@@ -196,6 +193,9 @@
         },
         
         cancelar () {
+            this.$session.remove('pMatricula')
+            this.$session.remove('pCpfCnpj')
+            this.$session.remove('pTipoContribuinte')
             this.$router.push('/identificar')
         },
         
