@@ -9,6 +9,18 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
+function pubPath(){
+  if(process.env.NODE_ENV === 'production'){
+    return config.build.assetsPublicPath
+  }
+  else if(process.env.NODE_ENV === 'homologation'){
+    return config.hml.assetsPublicPath
+  }
+  return config.dev.assetsPublicPath
+}
+
+
+
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -16,9 +28,7 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: pubPath()
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
