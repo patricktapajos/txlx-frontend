@@ -72,6 +72,7 @@ export default {
     
     .footer-text {
         visibility: hidden;
+        margin-top: auto;
     }
     .footer-text:before {
         content: "© 2018 Prefeitura de Manaus";

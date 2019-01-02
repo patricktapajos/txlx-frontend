@@ -1,7 +1,6 @@
 <template>
 <v-container>
-    <v-layout row class="text-xs-center">
-      <v-flex lg3 ></v-flex>
+    <v-layout row justify-center class="text-xs-center">
       <v-flex xs12 lg6 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
@@ -31,7 +30,7 @@
                     ></v-text-field>
                      
                      <v-card-actions>
-                        <v-btn color="primary" large block :disabled="validating" @click="identificar()">Prosseguir >></v-btn>
+                        <v-btn color="primary" large block :disabled="validating" @click="identificar()">Prosseguir</v-btn>
                         <v-progress-circular
                           v-show="validating"
                           :width="3"
@@ -43,7 +42,6 @@
             </v-card>
         </v-container>
       </v-flex>
-      <v-flex lg3 ></v-flex>
     </v-layout>
   </v-container>
 </template>
