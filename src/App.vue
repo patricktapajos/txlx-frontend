@@ -31,6 +31,10 @@ export default {
 </script>
 
 <style>
+
+  .v-card-btns-actions {
+    padding: 25px;
+  }
   
   .theme--light .v-toolbar {
     color: rgb(255, 255, 255) !important;
@@ -75,8 +79,17 @@ export default {
         margin-top: auto;
     }
     .footer-text:before {
+        position: absolute;
         content: "© 2018 Prefeitura de Manaus";
         visibility: visible;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%)
+    }
+
+    .h2-text {
+      font-size: inherit;
     }
   }
 

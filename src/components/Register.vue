@@ -30,37 +30,38 @@
 
                   <fieldset>
                     <legend>
-                      <h2>Declaração de Resíduos Sólidos Domésticos</h2>
+                      <h2 class="h2-text">Declaração de Resíduos Sólidos Domésticos</h2>
                     </legend>
                     
-                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" solo required
+                    <v-text-field v-model="qtdePessoas" :rules="qtdePessoasRules" label="Qtd. de Pessoas que Habitam o Imóvel" regular required
                     ></v-text-field>
 
-                    <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" solo required
+                    <v-select :items="faixas" item-value="id" item-text="descricao" v-model="faixaGeracao" :rules="faixaGeracaoRules" label="Faixa de Geração Diária de Resíduos" regular required
                       ></v-select>
 
                   </fieldset>
 
                   <fieldset>
                     <legend>
-                      <h2>Dados do Declarante</h2>
+                      <h2 class="h2-text">Dados do Declarante</h2>
                     </legend>
 
-                    <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" solo required
+                    <v-text-field v-model="nomeDeclarante" :rules="nomeDeclaranteRules" label="Nome do Declarante" maxlength=100 :counter="100" regular required
                     ></v-text-field>
 
-                    <v-text-field v-model="cpfDeclarante" :rules="cpfDeclaranteRules" label="CPF do Declarante" maxlength=14 :counter="14" solo required
+                    <v-text-field v-model="cpfDeclarante" :rules="cpfDeclaranteRules" label="CPF do Declarante" maxlength=14 :counter="14" regular required
                     return-masked-value mask="###.###.###-##"
                     ></v-text-field>
 
-                    <v-text-field v-model="email" :rules="emailRules" label="Email" solo></v-text-field>
+                    <v-text-field v-model="email" :rules="emailRules" label="Email" regular></v-text-field>
                     
-                    <v-text-field v-model="telefone" label="Telefone"  return-masked-value mask="(##)#####-####" solo></v-text-field>
+                    <v-text-field v-model="telefone" label="Telefone"  return-masked-value mask="(##)#####-####" regular></v-text-field>
 
                   </fieldset>
-                  
-                  <v-btn color="primary" @click="salvar()">Salvar</v-btn>
-                  <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
+                  <v-card-actions class="v-card-btns-actions">
+                    <v-btn color="primary" depressed block @click="salvar()">Salvar</v-btn>
+                    <v-btn color="error" depressed block @click="cancelar()">Cancelar</v-btn>
+                  </v-card-actions>
                 </v-form>
             </v-card>
         </v-container>
@@ -82,7 +83,6 @@
 
   export default {
     data: () => ({
-      //props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
       tipos: [],
       faixas: [],
       valid: false,

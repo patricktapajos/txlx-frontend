@@ -1,6 +1,8 @@
 <template>
 <v-container>
     <v-layout row justify-center class="text-xs-center">
+      <loading :active.sync="isLoading" 
+        :is-full-page="fullPage"></loading>
       <v-flex xs12 lg6 class="grey lighten-4">
         <v-container style="position: relative;" class="text-xs-center">
           <v-card flat>
@@ -30,13 +32,7 @@
                     ></v-text-field>
                      
                      <v-card-actions>
-                        <v-btn color="primary" large block :disabled="validating" @click="identificar()">Prosseguir</v-btn>
-                        <v-progress-circular
-                          v-show="validating"
-                          :width="3"
-                          color="primary"
-                          indeterminate
-                        ></v-progress-circular>
+                        <v-btn color="primary" depressed block @click="identificar()">Prosseguir</v-btn>
                       </v-card-actions>
                 </v-form>
             </v-card>
@@ -47,6 +43,8 @@
 </template>
 
 <script>
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.css';
   import CPF from 'gerador-validador-cpf'
   import * as cnpj  from '@fnando/cnpj'
   import { isValid as isValidCnpj } from "@fnando/cnpj"; 
@@ -55,7 +53,8 @@
   export default {
     data: () => ({
       valid: false,
-      validating: false,
+      isLoading: false,
+      fullPage: true,
       tipoContribuinte:'cpf',
       tipoContribuinteRules: [
         v => !!v || 'Tipo de Contribuinte é obrigatório'
@@ -68,6 +67,10 @@
       cnpj: '',
       msgErro: ''
     }),
+
+    components: {
+        loading: Loading
+    },
 
     watch: {
       tipoContribuinte: function(currentValue){
@@ -100,11 +103,11 @@
       identificar () {
         if (this.$refs.form.validate()) {
           let cpfcnpj = this.cpf != ''?this.cpf:this.cnpj
-          this.validating = true
+          this.isLoading = true
           this.axios.post(API_URL, {MATRICULA_IPTU: this.matricula, CPFCNPJ: cpfcnpj}).then(({data}) => {
             if (data.success) {
               this.msgErro = ''
-              this.validating = false
+              this.isLoading = false
               this.$session.set('pMatricula', this.matricula)
               this.$session.set('pCpfCnpj', cpfcnpj)
               this.$session.set('pTipoContribuinte', this.tipoContribuinte)
@@ -113,11 +116,11 @@
               this.$router.push({name: 'Immobile'})
 
             } else {
-              this.validating = false
+              this.isLoading = false
               this.msgErro = data.msgErro
             }
           }).catch((err) => {
-            this.validating = false
+            this.isLoading = false
             console.log(err)
           })
         }

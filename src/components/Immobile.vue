@@ -46,9 +46,10 @@
 
                      <v-alert :value="msg" type="error" outline v-html="msg">{{ msg }}</v-alert>
                      <br>
-
-                    <v-btn color="primary" @click="prosseguir()">Prosseguir</v-btn>
-                    <v-btn color="error" @click="cancelar()">Cancelar</v-btn>
+                    <v-card-actions class="v-card-btns-actions">
+                      <v-btn color="primary" depressed block @click="prosseguir()">Prosseguir</v-btn>
+                      <v-btn color="error" depressed block @click="cancelar()">Cancelar</v-btn>
+                    </v-card-actions>
                 </v-form>
             </v-card>
         </v-container>
@@ -64,7 +65,6 @@
 
   export default {
     data: () => ({
-      //props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],
       valid: false,
       isLoading: false,
       fullPage: true,

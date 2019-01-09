@@ -86,11 +86,10 @@
 
                     </table>
                 </div>
-                <br>
-                <v-btn color="secondary"  @click="imprimir()">Imprimir</v-btn>
-                <v-btn color="error" @click="cancelar()">Sair</v-btn>
-                <br>
-                <br>
+                <v-card-actions class="v-card-btns-actions">
+                    <v-btn color="secondary" depressed block @click="imprimir()">Imprimir</v-btn>
+                    <v-btn color="error" depressed block  @click="cancelar()">Sair</v-btn>
+                </v-card-actions>
             </v-card>
             
             
@@ -113,7 +112,6 @@
     data: () => ({
       isLoading: false,
       fullPage: true,
-      //props: ['pMatricula', 'pCpfCnpj', 'pTipoContribuinte'],      
       id: '',
       tipoContribuinte: '',
       matricula: '',
@@ -189,15 +187,22 @@
                     this.isLoading = false
                 },2000)
         },
-        
-        cancelar () {
+
+        removerSessao () {
             this.$session.remove('pMatricula')
             this.$session.remove('pCpfCnpj')
             this.$session.remove('pTipoContribuinte')
-            this.$router.push('/identificar')
+        },
+        
+        cancelar () {
+           this.removerSessao()
+           this.$router.push('/identificar')
         },
         
         imprimir () {
+            
+            this.removerSessao()
+
             this.isLoading = true 
             var doc = new jsPDF('portrait', 'pt', 'a4', true)
             doc.addImage(this.imgLogo, 'jpeg', 20, 25, 140, 49, 'logo-prefeitura')
