@@ -105,7 +105,7 @@ export default {
         background: url(assets/brasao.png);
         background-size: cover;
         height: 45px;
-        width: 35px;
+        width: 42px;
     }
   }
 
